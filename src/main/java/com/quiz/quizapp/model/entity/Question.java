@@ -41,7 +41,27 @@ public class Question {
       inverseJoinColumns = @JoinColumn(name = "option_id"))
   private List<Option> options = new ArrayList<>();
 
+  @Column(name = "media_url")
+  private String mediaUrl;
+
+  @Column(name = "time_limit")
+  private Integer timeLimit;
+
+  @Column
+  private Integer sequence;
+
+  @Column
+  private String hint;
+
+  @Column(name = "answer_type")
+  private AnswerType answerType;
+
   public void addOption(Option option) {
     options.add(option);
+  }
+
+  public enum AnswerType {
+    single,
+    multiple
   }
 }
