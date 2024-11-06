@@ -1,6 +1,5 @@
 package com.quiz.quizapp.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,13 +11,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Data
 @Table(name = "quizzes")
@@ -42,6 +42,33 @@ public class Quiz {
       joinColumns = @JoinColumn(name = "quiz_id"),
       inverseJoinColumns = @JoinColumn(name = "question_id"))
   private List<Question> questions = new ArrayList<>();
+
+  //Todo create User entity to join table
+  private Long authorId;
+
+  @CreatedDate
+  @Column(name = "created_at", updatable = false)
+  private LocalDateTime createdAt;
+
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
+
+  @Column(name = "hash", length = 35)
+  private String quizHash;
+
+  @Column
+  private String description;
+
+  @Column(name = "life_count")
+  private Integer lifeCounter = 3;
+
+  @Column(name = "skip_life_count")
+  private Boolean skipLifeCounter = false;
+
+  @Column(name = "time_limit")
+  private Integer timeLimit;
+
 
   public void addQuestion(Question question) {
     questions.add(question);
