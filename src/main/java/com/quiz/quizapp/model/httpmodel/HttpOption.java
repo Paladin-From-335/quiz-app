@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HttpOption {
   private String name;
-  private Boolean isCorrectAnswer;
+  private Boolean isCorrect;
 }

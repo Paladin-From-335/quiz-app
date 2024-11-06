@@ -1,6 +1,5 @@
 package com.quiz.quizapp.service;
 
-import com.quiz.quizapp.model.entity.Question;
 import com.quiz.quizapp.model.entity.Quiz;
 import com.quiz.quizapp.model.httpmodel.HttpQuiz;
 import com.quiz.quizapp.repository.QuizRepository;
@@ -17,12 +16,24 @@ public class QuizService {
   private final QuizMapper quizMapper;
 
   @Transactional
-  public Quiz saveQuiz(HttpQuiz httpQuiz) {
+  public void saveQuiz(HttpQuiz httpQuiz) {
     Quiz quiz = quizMapper.map(httpQuiz);
-     return quizRepo.save(quiz);
+    quizRepo.save(quiz);
   }
 
   public HttpQuiz getQuiz(Long id) {
     return quizMapper.mapToHttp(quizRepo.findById(id).orElseThrow());
   }
+
+  @Transactional
+  public HttpQuiz updateQuiz(Long id, HttpQuiz httpQuiz) {
+    Quiz quiz = quizMapper.map(httpQuiz);
+    quiz.setId(id);
+    return quizMapper.mapToHttp(quizRepo.save(quiz));
+  }
+
+  public void deleteQuiz(Long id) {
+    quizRepo.deleteById(id);
+  }
+
 }
