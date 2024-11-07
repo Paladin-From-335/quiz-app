@@ -21,9 +21,9 @@ public class QuizCreatorController {
   private final QuizService service;
 
   @PostMapping
-  public ResponseEntity<?> createQuiz(@RequestBody HttpQuiz quiz) {
-    service.saveQuiz(quiz);
-    return ResponseEntity.ok("ok");
+  public String createQuiz(@RequestBody HttpQuiz quiz) {
+    //TODO refactor to prettify the response
+    return service.saveQuiz(quiz);
   }
 
   @GetMapping("/{id}")

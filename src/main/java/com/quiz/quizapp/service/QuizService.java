@@ -3,6 +3,8 @@ package com.quiz.quizapp.service;
 import com.quiz.quizapp.model.entity.Quiz;
 import com.quiz.quizapp.model.httpmodel.HttpQuiz;
 import com.quiz.quizapp.repository.QuizRepository;
+import com.quiz.quizapp.utils.URIGenerator;
+import com.quiz.quizapp.utils.UUIDUtil;
 import com.quiz.quizapp.utils.mapper.QuizMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +18,11 @@ public class QuizService {
   private final QuizMapper quizMapper;
 
   @Transactional
-  public void saveQuiz(HttpQuiz httpQuiz) {
+  public String saveQuiz(HttpQuiz httpQuiz) {
+    String publicId = UUIDUtil.generateUUID();
     Quiz quiz = quizMapper.map(httpQuiz);
-    quizRepo.save(quiz);
+    quiz.setPublicId(publicId);
+    return URIGenerator.generateURI(publicId);
   }
 
   public HttpQuiz getQuiz(Long id) {

@@ -54,8 +54,8 @@ public class Quiz {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
-  @Column(name = "hash", length = 35)
-  private String quizHash;
+  @Column(name = "public_id", length = 32)
+  private String publicId;
 
   @Column
   private String description;

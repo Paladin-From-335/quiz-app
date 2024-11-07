@@ -11,12 +11,12 @@ ALTER TABLE quiz_questions
 ALTER TABLE quizzes
     ADD COLUMN created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Sets created_at to current timestamp on insert
     ADD COLUMN updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Initial value, but we’ll use a trigger to auto-update it
-    ADD COLUMN hash            VARCHAR(35), -- String with max length of 35
+    ADD COLUMN public_id            VARCHAR(32), -- String with max length of 35
     ADD COLUMN description     TEXT, -- Optional text field, no length limit specified
     ADD COLUMN life_count      INT       DEFAULT 3, -- Integer with default value of 3
     ADD COLUMN skip_life_count BOOLEAN   DEFAULT FALSE, -- Boolean with default value of FALSE
     ADD COLUMN time_limit      INT, -- Optional, with no specific max constraint,
-    ADD CONSTRAINT hash_unique UNIQUE (hash), -- Constraint to make table contain only unique hash values
+    ADD CONSTRAINT unique_public_id UNIQUE (public_id), -- Constraint to make table contain only unique hash values
     ADD CONSTRAINT time_limit_max CHECK (time_limit <= 3600); -- Constraint to ensure time_limit does not exceed 3600
 
 -- Create a function to auto-update the updated_at column on modification
