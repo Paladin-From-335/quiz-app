@@ -1,13 +1,13 @@
 package com.quiz.quizapp.utils.mapper;
 
-import com.quiz.quizapp.model.entity.CompletionData;
-import com.quiz.quizapp.model.httpmodel.HttpCompletionData;
+import com.quiz.quizapp.model.entity.Completion;
+import com.quiz.quizapp.model.httpmodel.HttpCompletion;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public abstract class CompletionMapper {
 
-  public abstract CompletionData map(HttpCompletionData source);
+  public abstract Completion map(HttpCompletion source);
 
-  public abstract HttpCompletionData map(CompletionData source);
+  public abstract HttpCompletion map(Completion source);
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompletionData {
+public class Completion {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

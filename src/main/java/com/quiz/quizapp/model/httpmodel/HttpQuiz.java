@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class HttpQuiz {
   private String quizName;
   private List<HttpQuestion> questions;
-  private HttpCompletionData completionData;
+  private HttpCompletion completionData;
 }
