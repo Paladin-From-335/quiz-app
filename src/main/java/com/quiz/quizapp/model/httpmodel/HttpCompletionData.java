@@ -1,6 +1,6 @@
 package com.quiz.quizapp.model.httpmodel;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HttpQuiz {
-  private String quizName;
-  private List<HttpQuestion> questions;
-  private HttpCompletionData completionData;
+public class HttpCompletionData {
+  private String header;
+  private String body;
+  @JsonProperty("time_spent")
+  private Integer timeSpent;
 }
