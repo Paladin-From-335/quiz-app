@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HttpCompletionData {
+public class HttpCompletion {
   private String header;
   private String body;
   @JsonProperty("time_spent")

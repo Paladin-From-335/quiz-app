@@ -22,6 +22,7 @@ public class QuizService {
     String publicId = UUIDUtil.generateUUID();
     Quiz quiz = quizMapper.map(httpQuiz);
     quiz.setPublicId(publicId);
+    quizRepo.save(quiz);
     return URIGenerator.generateURI(publicId);
   }
 

@@ -75,7 +75,7 @@ public class Quiz {
       name = "quiz_completion_data_join",
       joinColumns = @JoinColumn(name = "quiz_id"),
       inverseJoinColumns = @JoinColumn(name = "completion_data_id"))
-  private CompletionData completionData;
+  private Completion completion;
 
   public void addQuestion(Question question) {
     questions.add(question);
