@@ -14,5 +14,5 @@ public abstract class OptionMapper {
 
   public abstract HttpOption mapToHttp(Option source);
 
-  public abstract List<HttpOption> mapToHtpp(List<Option> source);
+  public abstract List<HttpOption> mapToHttp(List<Option> source);
 }

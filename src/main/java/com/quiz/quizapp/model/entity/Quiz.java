@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -69,6 +70,12 @@ public class Quiz {
   @Column(name = "time_limit")
   private Integer timeLimit;
 
+  @OneToOne
+  @JoinTable(
+      name = "quiz_completion_data_join",
+      joinColumns = @JoinColumn(name = "quiz_id"),
+      inverseJoinColumns = @JoinColumn(name = "completion_data_id"))
+  private CompletionData completionData;
 
   public void addQuestion(Question question) {
     questions.add(question);
