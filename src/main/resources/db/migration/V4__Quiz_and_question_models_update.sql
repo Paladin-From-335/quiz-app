@@ -11,7 +11,7 @@ ALTER TABLE quiz_questions
 ALTER TABLE quizzes
     ADD COLUMN created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Sets created_at to current timestamp on insert
     ADD COLUMN updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Initial value, but we’ll use a trigger to auto-update it
-    ADD COLUMN public_id            VARCHAR(32), -- String with max length of 35
+    ADD COLUMN public_id       VARCHAR(32), -- String with max length of 35
     ADD COLUMN description     TEXT, -- Optional text field, no length limit specified
     ADD COLUMN life_count      INT       DEFAULT 3, -- Integer with default value of 3
     ADD COLUMN skip_life_count BOOLEAN   DEFAULT FALSE, -- Boolean with default value of FALSE

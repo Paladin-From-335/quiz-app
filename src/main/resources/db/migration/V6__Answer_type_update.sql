@@ -1,0 +1,2 @@
+ALTER TABLE quiz_questions
+    ALTER COLUMN answer_type SET DEFAULT 'SINGLE_CHOICE';

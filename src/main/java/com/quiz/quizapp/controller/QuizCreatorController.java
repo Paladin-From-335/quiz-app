@@ -26,19 +26,19 @@ public class QuizCreatorController {
     return service.saveQuiz(quiz);
   }
 
-  @GetMapping("/{id}")
-  public HttpQuiz getQuiz(@PathVariable Long id) {
-    return service.getQuiz(id);
+  @GetMapping("/{uuid}")
+  public HttpQuiz getQuiz(@PathVariable("uuid") String publicId) {
+    return service.getQuiz(publicId);
   }
 
-  @PutMapping("/{id}")
-  public HttpQuiz updateQuiz(@PathVariable Long id, @RequestBody HttpQuiz quiz) {
-    return service.updateQuiz(id, quiz);
+  @PutMapping("/{uuid}")
+  public HttpQuiz updateQuiz(@PathVariable("uuid") String publicId, @RequestBody HttpQuiz quiz) {
+    return service.updateQuiz(publicId, quiz);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteQuiz(@PathVariable Long id) {
-    service.deleteQuiz(id);
+  @DeleteMapping("/{uuid}")
+  public ResponseEntity<?> deleteQuiz(@PathVariable("uuid") String publicId) {
+    service.deleteQuiz(publicId);
     return ResponseEntity.ok("Your quiz no longer exist");
   }
 }
