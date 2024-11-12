@@ -26,19 +26,20 @@ public class QuizService {
     return URIGenerator.generateURI(publicId);
   }
 
-  public HttpQuiz getQuiz(Long id) {
-    return quizMapper.mapToHttp(quizRepo.findById(id).orElseThrow());
+  public HttpQuiz getQuiz(String publicId) {
+    return quizMapper.mapToHttp(quizRepo.findByPublicId(publicId).orElseThrow());
   }
 
   @Transactional
-  public HttpQuiz updateQuiz(Long id, HttpQuiz httpQuiz) {
+  public HttpQuiz updateQuiz(String publicId, HttpQuiz httpQuiz) {
+    Long quizId = quizRepo.getQuizIdByPublicId(publicId).orElseThrow();
     Quiz quiz = quizMapper.map(httpQuiz);
-    quiz.setId(id);
+    quiz.setId(quizId);
     return quizMapper.mapToHttp(quizRepo.save(quiz));
   }
 
-  public void deleteQuiz(Long id) {
-    quizRepo.deleteById(id);
+  public void deleteQuiz(String publicId) {
+    quizRepo.deleteByPublicId(publicId);
   }
 
 }
