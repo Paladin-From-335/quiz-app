@@ -1,6 +1,7 @@
 package com.quiz.quizapp.controller;
 
 import com.quiz.quizapp.model.httpmodel.HttpQuiz;
+import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import com.quiz.quizapp.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,8 @@ public class QuizCreatorController {
   private final QuizService service;
 
   @PostMapping
-  public String createQuiz(@RequestBody HttpQuiz quiz) {
-    //TODO refactor to prettify the response
-    return service.saveQuiz(quiz);
+  public QuizResponse createQuiz(@RequestBody HttpQuiz quiz) {
+    return new QuizResponse(service.saveQuiz(quiz));
   }
 
   @GetMapping("/{uuid}")
