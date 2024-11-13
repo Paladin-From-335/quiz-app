@@ -6,9 +6,6 @@ build/
 !**/src/test/**/build/
 gradle
 
-### TEMPORARY ###
-application.properties
-
 ### STS ###
 .apt_generated
 .classpath
