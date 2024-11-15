@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,4 +32,12 @@ public class Completion {
 
   @Column(name = "time_spent")
   private Integer timeSpent;
+
+  @OneToOne
+  @JoinTable(
+      name = "quiz_completion_data_join",
+      joinColumns = @JoinColumn(name = "completion_data_id"),
+      inverseJoinColumns = @JoinColumn(name = "quiz_id"))
+  private Quiz quiz;
+
 }
