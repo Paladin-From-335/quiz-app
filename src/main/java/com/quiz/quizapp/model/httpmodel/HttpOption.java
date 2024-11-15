@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HttpOption {
+  private Long id;
   private String name;
-  private Boolean isCorrect;
 }
