@@ -15,4 +15,5 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
   Optional<Long> getQuizIdByPublicId(String publicId);
 
   void deleteByPublicId(String publicId);
+
 }
