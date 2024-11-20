@@ -1,5 +1,6 @@
 package com.quiz.quizapp.service;
 
+import com.quiz.quizapp.exception.QuizNotFoundException;
 import com.quiz.quizapp.model.entity.Quiz;
 import com.quiz.quizapp.model.httpmodel.HttpQuiz;
 import com.quiz.quizapp.repository.QuizRepository;
@@ -15,6 +16,7 @@ public class QuizService {
 
   private final QuizRepository quizRepo;
   private final QuizMapper quizMapper;
+  private final QuestionService questionService;
 
   @Transactional
   public Quiz saveQuiz(HttpQuiz httpQuiz) {
@@ -25,7 +27,9 @@ public class QuizService {
   }
 
   public HttpQuiz getQuiz(String publicId) {
-    return quizMapper.mapToHttp(quizRepo.findByPublicId(publicId).orElseThrow());
+    Quiz quiz = quizRepo.findByPublicId(publicId).orElseThrow(() -> new QuizNotFoundException(publicId));
+    questionService.cacheQuestions(quiz.getQuestions(), publicId);
+    return quizMapper.mapToHttp(quiz);
   }
 
   @Transactional
