@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HttpQuestion {
+  private Long id;
   private String questionName;
   private List<OptionRequest> options;
 }
