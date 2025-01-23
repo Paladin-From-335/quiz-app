@@ -1,9 +1,9 @@
 package com.quiz.quizapp.controller;
 
-import com.quiz.quizapp.model.httpmodel.HttpCompletion;
-import com.quiz.quizapp.model.httpmodel.HttpQuiz;
 import com.quiz.quizapp.model.httpmodel.request.AnswerRequest;
-import com.quiz.quizapp.model.httpmodel.request.CompletionRequest;
+import com.quiz.quizapp.model.httpmodel.request.CompletionPageRequest;
+import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
+import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import com.quiz.quizapp.service.CompletionService;
 import com.quiz.quizapp.service.QuestionService;
 import com.quiz.quizapp.service.QuizService;
@@ -24,12 +24,12 @@ public class QuizParticipantController {
   private final QuestionService questionService;
 
   @GetMapping("/{uuid}")
-  public HttpQuiz getQuiz(@PathVariable("uuid") String publicId) {
+  public QuizResponse getQuiz(@PathVariable("uuid") String publicId) {
     return quizService.getQuiz(publicId);
   }
 
   @GetMapping("/{uuid}/complete")
-  public HttpCompletion getCompletionPage(@PathVariable("uuid") String publicId, CompletionRequest request) {
+  public CompletionPageResponse getCompletionPage(@PathVariable("uuid") String publicId, CompletionPageRequest request) {
     return completionService.getCompletionData(publicId, request);
   }
 

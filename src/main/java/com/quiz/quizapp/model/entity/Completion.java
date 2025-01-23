@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,7 @@ public class Completion {
   private String body;
 
   @Column(name = "time_spent")
-  private Integer timeSpent;
+  private Duration timeSpent;
 
   @OneToOne
   @JoinTable(

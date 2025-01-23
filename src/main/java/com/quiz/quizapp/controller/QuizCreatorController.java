@@ -1,9 +1,10 @@
 package com.quiz.quizapp.controller;
 
 import com.quiz.quizapp.model.entity.Quiz;
-import com.quiz.quizapp.model.httpmodel.HttpCompletion;
-import com.quiz.quizapp.model.httpmodel.HttpQuiz;
+import com.quiz.quizapp.model.httpmodel.request.CreateCompletionPageRequest;
+import com.quiz.quizapp.model.httpmodel.request.CreateQuizRequest;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
+import com.quiz.quizapp.model.httpmodel.response.QuizUrlResponse;
 import com.quiz.quizapp.service.CompletionService;
 import com.quiz.quizapp.service.QuizService;
 import com.quiz.quizapp.utils.URIGenerator;
@@ -29,9 +30,9 @@ public class QuizCreatorController {
   private final CompletionService completionService;
 
   @PostMapping
-  public ResponseEntity<QuizResponse> createQuiz(@RequestBody HttpQuiz httpQuiz) {
-    Quiz quiz = service.saveQuiz(httpQuiz);
-    QuizResponse response = new QuizResponse(URIGenerator.generateURI(quiz.getPublicId()));
+  public ResponseEntity<QuizUrlResponse> createQuiz(@RequestBody CreateQuizRequest request) {
+    Quiz quiz = service.saveQuiz(request);
+    QuizUrlResponse response = new QuizUrlResponse(URIGenerator.generateURI(quiz.getPublicId()));
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .header("Quiz-UUID", quiz.getPublicId())
@@ -39,13 +40,13 @@ public class QuizCreatorController {
   }
 
   @GetMapping("/{uuid}")
-  public HttpQuiz getQuiz(@PathVariable("uuid") String publicId) {
+  public QuizResponse getQuiz(@PathVariable("uuid") String publicId) {
     return service.getQuiz(publicId);
   }
 
   @PutMapping("/{uuid}")
-  public HttpQuiz updateQuiz(@PathVariable("uuid") String publicId, @RequestBody HttpQuiz quiz) {
-    return service.updateQuiz(publicId, quiz);
+  public QuizResponse updateQuiz(@PathVariable("uuid") String publicId, @RequestBody CreateQuizRequest request) {
+    return service.updateQuiz(publicId, request);
   }
 
   @DeleteMapping("/{uuid}")
@@ -55,8 +56,8 @@ public class QuizCreatorController {
   }
 
   @PostMapping("/complete")
-  public ResponseEntity<?> createCompletionPage(@RequestHeader("Quiz-UUID") String publicId, HttpCompletion completion) {
-    completionService.createCompletionPage(publicId, completion);
+  public ResponseEntity<?> createCompletionPage(@RequestHeader("Quiz-UUID") String publicId, CreateCompletionPageRequest request) {
+    completionService.createCompletionPage(publicId, request);
     return ResponseEntity.ok("You created completion page");
   }
 }
