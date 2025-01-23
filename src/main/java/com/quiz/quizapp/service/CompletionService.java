@@ -4,8 +4,9 @@ import com.quiz.quizapp.exception.QuizNotCompletedException;
 import com.quiz.quizapp.exception.QuizNotFoundException;
 import com.quiz.quizapp.model.entity.Completion;
 import com.quiz.quizapp.model.entity.Quiz;
-import com.quiz.quizapp.model.httpmodel.HttpCompletion;
-import com.quiz.quizapp.model.httpmodel.request.CompletionRequest;
+import com.quiz.quizapp.model.httpmodel.request.CompletionPageRequest;
+import com.quiz.quizapp.model.httpmodel.request.CreateCompletionPageRequest;
+import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
 import com.quiz.quizapp.repository.CompletionDataRepository;
 import com.quiz.quizapp.repository.QuizRepository;
 import com.quiz.quizapp.utils.mapper.CompletionMapper;
@@ -20,7 +21,7 @@ public class CompletionService {
   private final CompletionDataRepository completionRepository;
   private final CompletionMapper completionMapper;
 
-  public HttpCompletion getCompletionData(String publicId, CompletionRequest request) {
+  public CompletionPageResponse getCompletionData(String publicId, CompletionPageRequest request) {
     if (!request.isCompleted()) {
       throw new QuizNotCompletedException();
     }
@@ -29,8 +30,8 @@ public class CompletionService {
             .orElseThrow(QuizNotCompletedException::new));
   }
 
-  public void createCompletionPage(String publicId, HttpCompletion httpCompletion) {
-    Completion completion = completionMapper.map(httpCompletion);
+  public void createCompletionPage(String publicId, CreateCompletionPageRequest request) {
+    Completion completion = completionMapper.map(request);
     Quiz quiz = quizRepository.findByPublicId(publicId)
         .orElseThrow(() -> new QuizNotFoundException(publicId));
 
