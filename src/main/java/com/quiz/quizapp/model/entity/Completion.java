@@ -26,7 +26,7 @@ public class Completion {
   private Long id;
 
   @Column
-  private String header = "Congratulations!";
+  private String title = "Congratulations!";
 
   @Column
   private String body;

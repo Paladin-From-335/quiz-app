@@ -1,7 +1,6 @@
 package com.quiz.quizapp.controller;
 
 import com.quiz.quizapp.model.httpmodel.request.AnswerRequest;
-import com.quiz.quizapp.model.httpmodel.request.CompletionPageRequest;
 import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import com.quiz.quizapp.service.CompletionService;
@@ -11,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,12 +30,12 @@ public class QuizParticipantController {
   }
 
   @GetMapping("/{uuid}/complete")
-  public CompletionPageResponse getCompletionPage(@PathVariable("uuid") String publicId, CompletionPageRequest request) {
-    return completionService.getCompletionData(publicId, request);
+  public CompletionPageResponse getCompletionPage(@PathVariable("uuid") String publicId, @RequestParam Boolean isCompleted) {
+    return completionService.getCompletionData(publicId, isCompleted);
   }
 
   @PostMapping("/{uuid}")
-  public Boolean submitAnswer(@PathVariable("uuid") String publicId, AnswerRequest request) {
+  public Boolean submitAnswer(@PathVariable("uuid") String publicId, @RequestBody AnswerRequest request) {
     return questionService.validateQuestionAnswers(publicId, request);
   }
 }

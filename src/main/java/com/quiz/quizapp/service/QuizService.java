@@ -20,11 +20,12 @@ public class QuizService {
   private final QuestionService questionService;
 
   @Transactional
-  public Quiz saveQuiz(CreateQuizRequest request) {
+  public String saveQuiz(CreateQuizRequest request) {
     String publicId = UUIDUtil.generateUUID();
     Quiz quiz = quizMapper.map(request);
     quiz.setPublicId(publicId);
-    return quizRepo.save(quiz);
+    quizRepo.save(quiz);
+    return publicId;
   }
 
   public QuizResponse getQuiz(String publicId) {
