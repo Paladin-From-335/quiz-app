@@ -1,7 +1,9 @@
 package com.quiz.quizapp.controller;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,14 +62,22 @@ public class QuizCreatorControllerTest {
   }
 
   @Test
+  void testCreateQuiz_badRequest() throws Exception {
+    mvc.perform(post("/quiz-creator")
+            .contentType("application/json")
+            .content(""))
+        .andExpect(status().isBadRequest());
+
+    verify(quizService, never()).saveQuiz(any());
+  }
+
+  @Test
   void testGetQuiz() throws Exception {
-    // Arrange
     String publicId = UUID.randomUUID().toString();
     QuizResponse quizResponse = new QuizResponse("Test Quiz", null, null);
 
     when(quizService.getQuiz(publicId)).thenReturn(quizResponse);
 
-    // Act & Assert
     mvc.perform(get("/quiz-creator/{uuid}", publicId))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.quizName").value("Test Quiz"));
@@ -95,6 +105,16 @@ public class QuizCreatorControllerTest {
         .andExpect(jsonPath("$.quizName").value("Updated Quiz"));
 
     verify(quizService, times(1)).updateQuiz(eq(publicId), any(CreateQuizRequest.class));
+  }
+
+  @Test
+  void testUpdateQuiz_badRequest() throws Exception {
+    mvc.perform(put("/quiz-creator/{uuid}", "publicId")
+            .contentType("application/json")
+            .content(""))
+        .andExpect(status().isBadRequest());
+
+    verify(quizService, never()).updateQuiz(anyString(), any());
   }
 
   @Test
@@ -126,6 +146,16 @@ public class QuizCreatorControllerTest {
         .andExpect(jsonPath("$").value("You created completion page"));
 
     verify(completionService, times(1)).createCompletionPage(publicId, request);
+  }
+
+  @Test
+  void testCreateCompletionPage_badRequest() throws Exception {
+    mvc.perform(post("/quiz-creator/complete")
+            .contentType("application/json")
+            .content(""))
+        .andExpect(status().isBadRequest());
+
+    verify(completionService, never()).createCompletionPage(any(), any());
   }
 
 

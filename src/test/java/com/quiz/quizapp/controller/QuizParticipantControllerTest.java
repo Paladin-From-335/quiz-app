@@ -1,6 +1,7 @@
 package com.quiz.quizapp.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -105,5 +106,15 @@ public class QuizParticipantControllerTest {
         .andExpect(jsonPath("$").value(true));
 
     verify(questionService, times(1)).validateQuestionAnswers(publicId, request);
+  }
+
+  @Test
+  void testSubmitAnswer_badRequest() throws Exception {
+    mvc.perform(post("/quiz/{uuid}", "publicId")
+            .contentType("application/json")
+            .content(""))
+        .andExpect(status().isBadRequest());
+
+    verify(questionService, never()).validateQuestionAnswers(any(), any());
   }
 }
