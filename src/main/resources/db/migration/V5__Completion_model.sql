@@ -1,7 +1,7 @@
 CREATE TABLE completion_data
 (
     id         BIGSERIAL PRIMARY KEY,
-    header     VARCHAR(255) NOT NULL,
+    title     VARCHAR(255) NOT NULL,
     body       TEXT,
     time_spent INT
 );

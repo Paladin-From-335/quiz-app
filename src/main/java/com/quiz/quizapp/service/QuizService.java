@@ -19,14 +19,29 @@ public class QuizService {
   private final QuizMapper quizMapper;
   private final QuestionService questionService;
 
+
+  /**
+   * Creates and saves a new quiz in the database and generates a unique public ID for it.
+   *
+   * @param request - the request object containing the data to create a new quiz
+   * @return the generated unique public UUID for the quiz
+   */
   @Transactional
-  public Quiz saveQuiz(CreateQuizRequest request) {
+  public String saveQuiz(CreateQuizRequest request) {
     String publicId = UUIDUtil.generateUUID();
     Quiz quiz = quizMapper.map(request);
     quiz.setPublicId(publicId);
-    return quizRepo.save(quiz);
+    quizRepo.save(quiz);
+    return publicId;
   }
 
+  /**
+   * Retrieves quiz details by its public UUID. Throws {@link QuizNotFoundException}
+   * if the quiz does not exist. Caches the quiz questions to reduce database load.
+   *
+   * @param publicId - the public UUID of the quiz
+   * @return the quiz data mapped to a response object
+   */
   public QuizResponse getQuiz(String publicId) {
     Quiz quiz = quizRepo.findByPublicId(publicId).orElseThrow(() -> new QuizNotFoundException(publicId));
     questionService.cacheQuestions(quiz.getQuestions(), publicId);
@@ -37,14 +52,16 @@ public class QuizService {
    *
    * @param publicId - UUID of the quiz
    * @param request - create/update quiz data request. Will be changed to a separate request model
-   * @return quiz data
+   * @return the quiz data mapped to a response object
    */
+  //TODO edit updating logic; split updates
   @Transactional
   public QuizResponse updateQuiz(String publicId, CreateQuizRequest request) {
     Long quizId = quizRepo.getQuizIdByPublicId(publicId).orElseThrow();
     Quiz quiz = quizMapper.map(request);
     quiz.setId(quizId);
-    return quizMapper.mapToHttp(quizRepo.save(quiz));
+    Quiz quiz2 = quizRepo.save(quiz);
+    return quizMapper.mapToHttp(quiz2);
   }
 
   public void deleteQuiz(String publicId) {

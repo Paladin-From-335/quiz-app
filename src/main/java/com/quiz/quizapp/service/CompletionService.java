@@ -4,7 +4,6 @@ import com.quiz.quizapp.exception.QuizNotCompletedException;
 import com.quiz.quizapp.exception.QuizNotFoundException;
 import com.quiz.quizapp.model.entity.Completion;
 import com.quiz.quizapp.model.entity.Quiz;
-import com.quiz.quizapp.model.httpmodel.request.CompletionPageRequest;
 import com.quiz.quizapp.model.httpmodel.request.CreateCompletionPageRequest;
 import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
 import com.quiz.quizapp.repository.CompletionDataRepository;
@@ -21,8 +20,8 @@ public class CompletionService {
   private final CompletionDataRepository completionRepository;
   private final CompletionMapper completionMapper;
 
-  public CompletionPageResponse getCompletionData(String publicId, CompletionPageRequest request) {
-    if (!request.isCompleted()) {
+  public CompletionPageResponse getCompletionData(String publicId, Boolean isCompleted) {
+    if (!isCompleted) {
       throw new QuizNotCompletedException();
     }
     return completionMapper.map(
