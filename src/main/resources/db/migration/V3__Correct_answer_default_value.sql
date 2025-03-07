@@ -1,0 +1,1 @@
+ALTER TABLE quiz_answer_options ALTER COLUMN is_correct SET DEFAULT false;

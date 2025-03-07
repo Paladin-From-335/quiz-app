@@ -54,12 +54,14 @@ public class QuizService {
    * @param request - create/update quiz data request. Will be changed to a separate request model
    * @return the quiz data mapped to a response object
    */
+  //TODO edit updating logic; split updates
   @Transactional
   public QuizResponse updateQuiz(String publicId, CreateQuizRequest request) {
     Long quizId = quizRepo.getQuizIdByPublicId(publicId).orElseThrow();
     Quiz quiz = quizMapper.map(request);
     quiz.setId(quizId);
-    return quizMapper.mapToHttp(quizRepo.save(quiz));
+    Quiz quiz2 = quizRepo.save(quiz);
+    return quizMapper.mapToHttp(quiz2);
   }
 
   public void deleteQuiz(String publicId) {
