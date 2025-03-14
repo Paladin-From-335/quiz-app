@@ -3,8 +3,8 @@ package com.quiz.quizapp.controller;
 import com.quiz.quizapp.model.httpmodel.request.AnswerRequest;
 import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
+import com.quiz.quizapp.service.AnswerValidationService;
 import com.quiz.quizapp.service.CompletionService;
-import com.quiz.quizapp.service.QuestionService;
 import com.quiz.quizapp.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ public class QuizParticipantController {
 
   private final QuizService quizService;
   private final CompletionService completionService;
-  private final QuestionService questionService;
+  private final AnswerValidationService validationService;
 
   @GetMapping("/{uuid}")
   public QuizResponse getQuiz(@PathVariable("uuid") String publicId) {
@@ -36,6 +36,6 @@ public class QuizParticipantController {
 
   @PostMapping("/{uuid}")
   public Boolean submitAnswer(@PathVariable("uuid") String publicId, @RequestBody AnswerRequest request) {
-    return questionService.validateQuestionAnswers(publicId, request);
+    return validationService.validateQuestionAnswers(publicId, request);
   }
 }
