@@ -18,7 +18,7 @@ public class QuestionService {
 
   private final RedisTemplate<String, Object> redisTemplate;
 
-  private boolean isQuizCached(String publicId) {
+  public boolean areQuestionsCached(String publicId) {
     return redisTemplate.hasKey(publicId);
   }
 
@@ -30,7 +30,7 @@ public class QuestionService {
    * @param publicId  - quiz public ID (UUID)
    */
   public void cacheQuestions(List<Question> questions, String publicId) {
-    if (!isQuizCached(publicId)) {
+    if (!areQuestionsCached(publicId)) {
       // redis hash operations, needed to operate triplets <T,K,V>
       HashOperations<String, Long, List<Long>> hashOps = redisTemplate.opsForHash();
       questions.forEach(q -> {
@@ -43,35 +43,6 @@ public class QuestionService {
       });
     }
     redisTemplate.expire(publicId, Duration.ofMinutes(30)); //TODO make duration customizable
-  }
-
-  public Boolean validateQuestionAnswers(String publicId, AnswerRequest request) {
-    if (isQuizCached(publicId)) {
-      HashOperations<String, Long, List<Long>> hashOps = redisTemplate.opsForHash();
-      List<Long> correctAnswers = hashOps.get(publicId, request.questionId());
-      return compareAnswers(correctAnswers, request.participantAnswers());
-    }
-    return false;
-  }
-
-  /**
-   * @param cAnswers - correct answers gotten from Redis
-   * @param pAnswers - participant answers from request
-   * @return true or false after comparison of correct and participant answers
-   */
-  private Boolean compareAnswers(List<Long> cAnswers, List<Long> pAnswers) {
-    if (cAnswers == null || pAnswers == null) {
-      return false;
-    }
-    if (cAnswers.size() != pAnswers.size()) {
-      return false;
-    }
-    List<Long> cAnswersSorted = new ArrayList<>(cAnswers);
-    List<Long> pAnswersSorted = new ArrayList<>(pAnswers);
-    Collections.sort(cAnswersSorted);
-    Collections.sort(pAnswersSorted);
-
-    return cAnswersSorted.equals(pAnswersSorted);
   }
 
 }
