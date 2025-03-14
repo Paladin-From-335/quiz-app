@@ -12,15 +12,14 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Data
 @Table(name = "quizzes")
@@ -46,13 +45,13 @@ public class Quiz {
   private List<Question> questions = new ArrayList<>();
 
   //Todo create User entity to join table
-  private Long authorId;
+//  private Long authorId;
 
-  @CreatedDate
+  @CreationTimestamp
   @Column(name = "created_at", updatable = false)
   private LocalDateTime createdAt;
 
-  @LastModifiedDate
+  @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
