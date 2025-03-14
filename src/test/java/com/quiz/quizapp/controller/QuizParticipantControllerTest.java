@@ -14,8 +14,8 @@ import com.quiz.quizapp.exception.QuizNotCompletedException;
 import com.quiz.quizapp.model.httpmodel.request.AnswerRequest;
 import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
+import com.quiz.quizapp.service.AnswerValidationService;
 import com.quiz.quizapp.service.CompletionService;
-import com.quiz.quizapp.service.QuestionService;
 import com.quiz.quizapp.service.QuizService;
 import org.junit.jupiter.api.Test;
 import java.time.Duration;
@@ -34,7 +34,7 @@ public class QuizParticipantControllerTest {
   @MockBean
   private CompletionService completionService;
   @MockBean
-  private QuestionService questionService;
+  private AnswerValidationService validationService;
 
   @Autowired
   private MockMvc mvc;
@@ -92,7 +92,7 @@ public class QuizParticipantControllerTest {
     String publicId = UUID.randomUUID().toString();
     AnswerRequest request = new AnswerRequest(1L, List.of(1L, 2L, 3L));
 
-    when(questionService.validateQuestionAnswers(any(), any())).thenReturn(true);
+    when(validationService.validateQuestionAnswers(any(), any())).thenReturn(true);
 
     mvc.perform(post("/quiz/{uuid}", publicId)
             .contentType("application/json")
@@ -105,7 +105,7 @@ public class QuizParticipantControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").value(true));
 
-    verify(questionService, times(1)).validateQuestionAnswers(publicId, request);
+    verify(validationService, times(1)).validateQuestionAnswers(publicId, request);
   }
 
   @Test
@@ -115,6 +115,6 @@ public class QuizParticipantControllerTest {
             .content(""))
         .andExpect(status().isBadRequest());
 
-    verify(questionService, never()).validateQuestionAnswers(any(), any());
+    verify(validationService, never()).validateQuestionAnswers(any(), any());
   }
 }

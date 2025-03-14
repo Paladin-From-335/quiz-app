@@ -7,7 +7,7 @@ package com.quiz.quizapp.model.httpmodel.response;
  * </p>
  *
  * @param id   - answer option id
- * @param name - answer option declaration (name)
+ * @param optionName - answer option declaration (name)
  */
-public record OptionResponse(Long id, String name) {
+public record OptionResponse(Long id, String optionName) {
 }

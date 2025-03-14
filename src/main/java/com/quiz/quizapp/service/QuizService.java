@@ -55,13 +55,10 @@ public class QuizService {
    * @return the quiz data mapped to a response object
    */
   //TODO edit updating logic; split updates
+  @SuppressWarnings("Logic is not complete")
   @Transactional
   public QuizResponse updateQuiz(String publicId, CreateQuizRequest request) {
-    Long quizId = quizRepo.getQuizIdByPublicId(publicId).orElseThrow();
-    Quiz quiz = quizMapper.map(request);
-    quiz.setId(quizId);
-    Quiz quiz2 = quizRepo.save(quiz);
-    return quizMapper.mapToHttp(quiz2);
+    return null;
   }
 
   public void deleteQuiz(String publicId) {

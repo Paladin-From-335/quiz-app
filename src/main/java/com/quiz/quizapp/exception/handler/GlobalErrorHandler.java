@@ -16,7 +16,7 @@ public class GlobalErrorHandler {
   }
 
   @ExceptionHandler(QuizNotFoundException.class)
-  public ResponseEntity<?> handleQuizNotCompletedException(QuizNotFoundException e) {
+  public ResponseEntity<?> handleQuizNotFoundException(QuizNotFoundException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
   }
 
