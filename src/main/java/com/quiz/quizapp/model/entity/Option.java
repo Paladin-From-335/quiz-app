@@ -23,8 +23,8 @@ public class Option {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "name", nullable = false)
-  private String name;
+  @Column(name = "option_name", nullable = false)
+  private String optionName;
 
   @Column(name = "is_correct")
   private Boolean isCorrect;
