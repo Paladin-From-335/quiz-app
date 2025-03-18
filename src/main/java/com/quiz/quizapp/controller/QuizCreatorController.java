@@ -2,6 +2,7 @@ package com.quiz.quizapp.controller;
 
 import com.quiz.quizapp.model.httpmodel.request.CreateCompletionPageRequest;
 import com.quiz.quizapp.model.httpmodel.request.CreateQuizRequest;
+import com.quiz.quizapp.model.httpmodel.request.UpdateQuizRequest;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import com.quiz.quizapp.model.httpmodel.response.QuizUrlResponse;
 import com.quiz.quizapp.service.CompletionService;
@@ -31,8 +32,18 @@ public class QuizCreatorController {
   private final CompletionService completionService;
 
   @PostMapping
-  public ResponseEntity<QuizUrlResponse> createQuiz(@RequestBody CreateQuizRequest request) {
+  public ResponseEntity<?> createQuiz(@RequestBody CreateQuizRequest request) {
     String publicId = service.saveQuiz(request);
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .header("Quiz-UUID", publicId)
+        .build();
+  }
+
+  @PostMapping("/complete")
+  public ResponseEntity<QuizUrlResponse> createCompletionPage(@RequestHeader("Quiz-UUID") String publicId,
+                                                              @RequestBody CreateCompletionPageRequest request) {
+    completionService.createCompletionPage(publicId, request);
     QuizUrlResponse response = new QuizUrlResponse(URIGenerator.generateURI(publicId));
     return ResponseEntity
         .status(HttpStatus.CREATED)
@@ -45,10 +56,10 @@ public class QuizCreatorController {
     return service.getQuiz(publicId);
   }
 
-// Tmp; TODO change update logic + new tests
+  // Tmp; TODO implement dynamic query building in serivce layer
   @SuppressWarnings("Update logic is not complete")
   @PutMapping("/{uuid}")
-  public QuizResponse updateQuiz(@PathVariable("uuid") String publicId, @RequestBody CreateQuizRequest request) {
+  public QuizResponse updateQuiz(@PathVariable("uuid") String publicId, @RequestBody UpdateQuizRequest request) {
     return service.updateQuiz(publicId, request);
   }
 
@@ -56,11 +67,5 @@ public class QuizCreatorController {
   public ResponseEntity<?> deleteQuiz(@PathVariable("uuid") String publicId) {
     service.deleteQuiz(publicId);
     return ResponseEntity.ok("Your quiz no longer exist");
-  }
-
-  @PostMapping("/complete")
-  public ResponseEntity<?> createCompletionPage(@RequestHeader("Quiz-UUID") String publicId, @RequestBody CreateCompletionPageRequest request) {
-    completionService.createCompletionPage(publicId, request);
-    return ResponseEntity.ok("You created completion page");
   }
 }

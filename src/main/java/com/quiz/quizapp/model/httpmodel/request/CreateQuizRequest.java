@@ -7,8 +7,6 @@ import java.util.List;
  *
  * @param quizName              - name of the quiz user may see on the "Start quiz page" (e.g. "Quiz for friends")
  * @param questions             - quiz questions
- * @param completionPageRequest - final page of the quiz
  */
-public record CreateQuizRequest(String quizName, List<CreateQuestionRequest> questions,
-                                CreateCompletionPageRequest completionPageRequest) {
+public record CreateQuizRequest(String quizName, List<CreateQuestionRequest> questions) {
 }
