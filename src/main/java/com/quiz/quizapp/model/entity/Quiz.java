@@ -72,10 +72,10 @@ public class Quiz {
 
   @OneToOne
   @JoinTable(
-      name = "quiz_completion_data_join",
+      name = "quiz_completion_page_join",
       joinColumns = @JoinColumn(name = "quiz_id"),
-      inverseJoinColumns = @JoinColumn(name = "completion_data_id"))
-  private Completion completion;
+      inverseJoinColumns = @JoinColumn(name = "completion_page_id"))
+  private CompletionPage completionPage;
 
   public void addQuestion(Question question) {
     questions.add(question);

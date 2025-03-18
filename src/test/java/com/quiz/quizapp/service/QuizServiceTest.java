@@ -59,8 +59,7 @@ public class QuizServiceTest {
     CreateQuestionRequest queReq = new CreateQuestionRequest("questionName", List.of(optReq));
     CreateQuizRequest request = new CreateQuizRequest(
         "name",
-        List.of(queReq),
-        null
+        List.of(queReq)
     );
     String result = quizService.saveQuiz(request);
     Quiz quiz = quizRepo.findByPublicId(result).get();
@@ -69,7 +68,7 @@ public class QuizServiceTest {
         () -> assertEquals(request.questions().size(), quiz.getQuestions().size()),
         () -> assertEquals(queReq.questionName(), quiz.getQuestions().getFirst().getQuestionName()),
         () -> assertEquals(queReq.options().size(), quiz.getQuestions().getFirst().getOptions().size()),
-        () -> assertEquals(optReq.name(), quiz.getQuestions().getFirst().getOptions().getFirst().getName()),
+        () -> assertEquals(optReq.optionName(), quiz.getQuestions().getFirst().getOptions().getFirst().getOptionName()),
         () -> assertEquals(optReq.isCorrect(), quiz.getQuestions().getFirst().getOptions().getFirst().getIsCorrect())
     );
   }
@@ -83,8 +82,7 @@ public class QuizServiceTest {
     assertAll(
         () -> assertEquals("Math Quiz", result.quizName()),
         () -> assertEquals(3, result.questions().size()),
-        () -> assertEquals("What is the capital of France?", result.questions().getFirst().questionName()),
-        () -> assertNull(result.completionPageRequest()) //tmp
+        () -> assertEquals("What is the capital of France?", result.questions().getFirst().questionName())
     );
     verify(questionService, times(1)).cacheQuestions(any(), eq(publicId));
   }

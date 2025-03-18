@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.quiz.quizapp.model.httpmodel.request.CreateCompletionPageRequest;
 import com.quiz.quizapp.model.httpmodel.request.CreateQuizRequest;
+import com.quiz.quizapp.model.httpmodel.request.UpdateQuizRequest;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import com.quiz.quizapp.service.CompletionService;
 import com.quiz.quizapp.service.QuizService;
@@ -41,7 +42,6 @@ public class QuizCreatorControllerTest {
   @Test
   void testCreateQuiz() throws Exception {
     String publicId = UUID.randomUUID().toString();
-    String respUrl = URIGenerator.generateURI(publicId);
 
     when(quizService.saveQuiz(any(CreateQuizRequest.class))).thenReturn(publicId);
 
@@ -55,8 +55,7 @@ public class QuizCreatorControllerTest {
                 }
                 """))
         .andExpect(status().isCreated())
-        .andExpect(header().string("Quiz-UUID", publicId))
-        .andExpect(jsonPath("$.url").value(respUrl));
+        .andExpect(header().string("Quiz-UUID", publicId));
 
     verify(quizService, times(1)).saveQuiz(any(CreateQuizRequest.class));
   }
@@ -74,7 +73,7 @@ public class QuizCreatorControllerTest {
   @Test
   void testGetQuiz() throws Exception {
     String publicId = UUID.randomUUID().toString();
-    QuizResponse quizResponse = new QuizResponse("Test Quiz", null, null);
+    QuizResponse quizResponse = new QuizResponse("Test Quiz", null);
 
     when(quizService.getQuiz(publicId)).thenReturn(quizResponse);
 
@@ -88,9 +87,10 @@ public class QuizCreatorControllerTest {
   @Test
   void testUpdateQuiz() throws Exception {
     String publicId = UUID.randomUUID().toString();
-    QuizResponse quizResponse = new QuizResponse("Updated Quiz", null, null);
+    String respUrl = URIGenerator.generateURI(publicId);
+    QuizResponse quizResponse = new QuizResponse("Updated Quiz", null);
 
-    when(quizService.updateQuiz(any(String.class), any(CreateQuizRequest.class))).thenReturn(quizResponse);
+    when(quizService.updateQuiz(any(String.class), any(UpdateQuizRequest.class))).thenReturn(quizResponse);
 
     mvc.perform(put("/quiz-creator/{uuid}", publicId)
             .contentType("application/json")
@@ -102,9 +102,10 @@ public class QuizCreatorControllerTest {
                 }
                 """))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.quizName").value("Updated Quiz"));
+        .andExpect(jsonPath("$.quizName").value("Updated Quiz"))
+        .andExpect(jsonPath("$.url").value(respUrl));;
 
-    verify(quizService, times(1)).updateQuiz(eq(publicId), any(CreateQuizRequest.class));
+    verify(quizService, times(1)).updateQuiz(eq(publicId), any(UpdateQuizRequest.class));
   }
 
   @Test
