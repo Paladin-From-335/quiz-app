@@ -24,6 +24,7 @@ public class QuizParticipantController {
   private final CompletionService completionService;
   private final AnswerValidationService validationService;
 
+  //Todo return as pageable
   @GetMapping("/{uuid}")
   public QuizResponse getQuiz(@PathVariable("uuid") String publicId) {
     return quizService.getQuiz(publicId);

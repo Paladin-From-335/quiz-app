@@ -8,6 +8,7 @@ package com.quiz.quizapp.model.httpmodel.response;
  *
  * @param id   - answer option id
  * @param optionName - answer option declaration (name)
+ * @param isCorrect - answer correctness marker
  */
-public record OptionResponse(Long id, String optionName) {
+public record OptionResponse(Long id, String optionName, Boolean isCorrect) {
 }

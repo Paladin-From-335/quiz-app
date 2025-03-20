@@ -56,8 +56,6 @@ public class QuizCreatorController {
     return service.getQuiz(publicId);
   }
 
-  // Tmp; TODO implement dynamic query building in serivce layer
-  @SuppressWarnings("Update logic is not complete")
   @PutMapping("/{uuid}")
   public QuizResponse updateQuiz(@PathVariable("uuid") String publicId, @RequestBody UpdateQuizRequest request) {
     return service.updateQuiz(publicId, request);
