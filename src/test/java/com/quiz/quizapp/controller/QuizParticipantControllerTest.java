@@ -42,7 +42,7 @@ public class QuizParticipantControllerTest {
   @Test
   void testGetQuiz() throws Exception {
     String publicId = UUID.randomUUID().toString();
-    QuizResponse quizResponse = new QuizResponse("Sample Quiz", null, null);
+    QuizResponse quizResponse = new QuizResponse("Sample Quiz", null);
 
     when(quizService.getQuiz(publicId)).thenReturn(quizResponse);
 

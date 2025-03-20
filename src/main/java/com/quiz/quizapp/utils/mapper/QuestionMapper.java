@@ -6,7 +6,7 @@ import com.quiz.quizapp.model.httpmodel.response.QuestionResponse;
 import org.mapstruct.Mapper;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = OptionMapper.class)
+@Mapper(componentModel = "spring", config = CustomMapperConfig.class, uses = OptionMapper.class)
 public abstract class QuestionMapper {
 
   public abstract Question map(CreateQuestionRequest source);
@@ -16,4 +16,5 @@ public abstract class QuestionMapper {
   public abstract QuestionResponse mapToHttp(Question source);
 
   public abstract List<QuestionResponse> mapToHttp(List<Question> source);
+
 }

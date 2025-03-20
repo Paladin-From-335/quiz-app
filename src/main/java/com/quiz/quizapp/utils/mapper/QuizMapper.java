@@ -6,7 +6,7 @@ import com.quiz.quizapp.model.httpmodel.request.UpdateQuizRequest;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring",
+@Mapper(componentModel = "spring", config = CustomMapperConfig.class,
     uses = {QuestionMapper.class, CompletionPageMapper.class})
 public abstract class QuizMapper {
 

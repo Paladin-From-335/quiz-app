@@ -6,7 +6,7 @@ import com.quiz.quizapp.model.httpmodel.response.CompletionPageResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", config = CustomMapperConfig.class)
 public abstract class CompletionPageMapper {
 
   public abstract CompletionPage map(CreateCompletionPageRequest source);

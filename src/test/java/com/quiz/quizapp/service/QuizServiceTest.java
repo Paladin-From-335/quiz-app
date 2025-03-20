@@ -3,7 +3,6 @@ package com.quiz.quizapp.service;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -13,44 +12,40 @@ import com.quiz.quizapp.model.entity.Quiz;
 import com.quiz.quizapp.model.httpmodel.request.CreateOptionRequest;
 import com.quiz.quizapp.model.httpmodel.request.CreateQuestionRequest;
 import com.quiz.quizapp.model.httpmodel.request.CreateQuizRequest;
+import com.quiz.quizapp.model.httpmodel.request.UpdateQuizRequest;
 import com.quiz.quizapp.model.httpmodel.response.QuizResponse;
 import com.quiz.quizapp.repository.QuizRepository;
-import com.quiz.quizapp.utils.AllMappers;
+import com.quiz.quizapp.utils.CustomJpaTestConfiguration;
 import com.quiz.quizapp.utils.mapper.QuizMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.jdbc.Sql;
 
-@DataJpaTest
-@Transactional
-@Sql(scripts = "classpath:/data.sql")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(AllMappers.class)
+@CustomJpaTestConfiguration
 public class QuizServiceTest {
 
   @Autowired
   private QuizRepository quizRepo;
-
   @Autowired
   private QuizMapper quizMapper;
+  @Autowired
+  private TestEntityManager testEntityManager;
 
   @MockBean
   private QuestionService questionService;
+  @MockBean
+  private OptionService optionService;
 
   private QuizService quizService;
 
   @BeforeEach
   void setUp() {
-    quizService = new QuizService(quizRepo, quizMapper, questionService);
-
+    quizService = new QuizService(quizRepo, quizMapper, questionService,
+        optionService, testEntityManager.getEntityManager());
   }
 
   @Test
@@ -95,4 +90,24 @@ public class QuizServiceTest {
 
     assertEquals(Optional.empty(), quizRepo.getQuizIdByPublicId(publicId));
   }
+
+  @Test
+  void testUpdateQuizData() {
+    String publicId = "public-uuid-10";
+    Quiz quiz = new Quiz();
+    quiz.setPublicId(publicId);
+    quiz.setQuizName("Original Quiz Name");
+    quizRepo.save(quiz);
+
+    UpdateQuizRequest updateRequest = new UpdateQuizRequest("Updated Quiz Name", null);
+    quizService.updateQuizData(publicId, updateRequest);
+
+    // Clear to ensure no stale data remains from cache
+    testEntityManager.clear();
+
+    Optional<Quiz> updatedQuiz = quizRepo.findByPublicId(publicId);
+    assertNotNull(updatedQuiz);
+    assertEquals("Updated Quiz Name", updatedQuiz.get().getQuizName());
+  }
+
 }
