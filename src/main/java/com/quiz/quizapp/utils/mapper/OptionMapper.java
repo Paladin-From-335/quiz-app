@@ -6,7 +6,7 @@ import com.quiz.quizapp.model.httpmodel.response.OptionResponse;
 import org.mapstruct.Mapper;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", config = CustomMapperConfig.class)
 public abstract class OptionMapper {
 
   public abstract Option map(CreateOptionRequest source);
