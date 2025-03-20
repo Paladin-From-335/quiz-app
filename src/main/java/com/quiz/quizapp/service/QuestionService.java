@@ -1,11 +1,17 @@
 package com.quiz.quizapp.service;
 
+import static com.quiz.quizapp.utils.helper.DynamicUpdateHelper.setDynamicUpdates;
+
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import com.quiz.quizapp.model.entity.Option;
+import com.quiz.quizapp.model.entity.QQuestion;
 import com.quiz.quizapp.model.entity.Question;
-import com.quiz.quizapp.model.httpmodel.request.AnswerRequest;
+import com.quiz.quizapp.model.httpmodel.request.UpdateQuestionRequest;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
@@ -16,6 +22,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionService {
 
+  @PersistenceContext
+  private final EntityManager entityManager;
   private final RedisTemplate<String, Object> redisTemplate;
 
   public boolean areQuestionsCached(String publicId) {
@@ -43,6 +51,20 @@ public class QuestionService {
       });
     }
     redisTemplate.expire(publicId, Duration.ofMinutes(30)); //TODO make duration customizable
+  }
+
+  @Transactional
+  public void updateQuestionData(List<UpdateQuestionRequest> questions) {
+    QQuestion question = QQuestion.question;
+
+    for (UpdateQuestionRequest questionRequest : questions) {
+      JPAUpdateClause updateClause = new JPAUpdateClause(entityManager, question)
+          .where(question.id.eq(questionRequest.id()));
+
+      setDynamicUpdates(updateClause, questionRequest, new PathBuilder<>(QQuestion.class, "question"));
+
+      updateClause.execute();
+    }
   }
 
 }
