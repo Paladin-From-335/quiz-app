@@ -87,7 +87,6 @@ public class QuizCreatorControllerTest {
   @Test
   void testUpdateQuiz() throws Exception {
     String publicId = UUID.randomUUID().toString();
-    String respUrl = URIGenerator.generateURI(publicId);
     QuizResponse quizResponse = new QuizResponse("Updated Quiz", null);
 
     when(quizService.updateQuiz(any(String.class), any(UpdateQuizRequest.class))).thenReturn(quizResponse);
@@ -102,8 +101,7 @@ public class QuizCreatorControllerTest {
                 }
                 """))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.quizName").value("Updated Quiz"))
-        .andExpect(jsonPath("$.url").value(respUrl));;
+        .andExpect(jsonPath("$.quizName").value("Updated Quiz"));
 
     verify(quizService, times(1)).updateQuiz(eq(publicId), any(UpdateQuizRequest.class));
   }
@@ -132,6 +130,8 @@ public class QuizCreatorControllerTest {
   @Test
   void testCreateCompletionPage() throws Exception {
     String publicId = UUID.randomUUID().toString();
+    String respUrl = URIGenerator.generateURI(publicId);
+
     CreateCompletionPageRequest request = new CreateCompletionPageRequest("Final", "Thank you!");
 
     mvc.perform(post("/quiz-creator/complete")
@@ -143,8 +143,8 @@ public class QuizCreatorControllerTest {
                   "body": "Thank you!"
                 }
                 """))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$").value("You created completion page"));
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.url").value(respUrl));
 
     verify(completionService, times(1)).createCompletionPage(publicId, request);
   }
